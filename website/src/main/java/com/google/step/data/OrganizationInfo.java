@@ -28,9 +28,13 @@ public final class OrganizationInfo {
   public boolean isValid() {
     UrlValidator urlValidator = new UrlValidator();
     //Required fields
-    if (((String) this.entity.getProperty("name")).isEmpty() || 
-    	  ((String) this.entity.getProperty("about")).isEmpty() ||
-        !urlValidator.isValid(((String) this.entity.getProperty("webLink")))) {
+    try {
+      if (((String) this.entity.getProperty("name")).isEmpty() || 
+          ((String) this.entity.getProperty("about")).isEmpty() ||
+          !urlValidator.isValid(((String) this.entity.getProperty("webLink")))) {
+        return false;
+      }
+    } catch (ClassCastException e) {
       return false;
     }
     //Change invalid Optional Fields to null
