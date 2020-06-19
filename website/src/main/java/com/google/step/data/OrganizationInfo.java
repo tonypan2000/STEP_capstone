@@ -10,8 +10,8 @@ import org.apache.commons.validator.UrlValidator;
 public final class OrganizationInfo {
   private final Entity entity;
 
-  public OrganizationInfo(HttpServletRequest request) {
-    this.entity = getOrgEntityFrom(request);
+  public OrganizationInfo(Entity organizationEntity) {
+    this.entity = organizationEntity;
   }
 
   private Entity getOrgEntityFrom(HttpServletRequest request) {
@@ -57,5 +57,9 @@ public final class OrganizationInfo {
 
   public Query getQueryForDuplicates() {
     return new Query("Organization").addFilter("name", Query.FilterOperator.EQUAL, entity.getProperty("name"));
+  }
+
+  public static OrganizationInfo createObjectInfoFrom(HttpServletRequest request) {
+    return new OrganizationInfo(getOrgEntityFrom(request));
   }
 }
