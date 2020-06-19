@@ -14,7 +14,7 @@ public final class OrganizationInfo {
     this.entity = organizationEntity;
   }
 
-  private Entity getOrgEntityFrom(HttpServletRequest request) {
+  private static Entity getOrgEntityFrom(HttpServletRequest request) {
     Entity newOrganization = new Entity("Organization");
     newOrganization.setProperty("name", request.getParameter("orgName"));
     newOrganization.setProperty("webLink", request.getParameter("webLink"));
@@ -59,7 +59,7 @@ public final class OrganizationInfo {
     return new Query("Organization").addFilter("name", Query.FilterOperator.EQUAL, entity.getProperty("name"));
   }
 
-  public static OrganizationInfo createObjectInfoFrom(HttpServletRequest request) {
+  public static OrganizationInfo createInstanceFrom(HttpServletRequest request) {
     return new OrganizationInfo(getOrgEntityFrom(request));
   }
 }

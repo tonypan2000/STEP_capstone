@@ -41,10 +41,10 @@ public class DataServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    OrganizationInfo submission = new OrganizationInfo(request);
+    OrganizationInfo submission = OrganizationInfo.createInstanceFrom(request);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.prepare(submission.getQueryForDuplicates()).asList(FetchOptions.Builder.withDefaults()).forEach((duplicate -> {
-      submission.compare(duplicate);
+      submission.merge(duplicate);
       datastore.delete(duplicate.getKey());
     }));
     if (submission.isValid()) {
