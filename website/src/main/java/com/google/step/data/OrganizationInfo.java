@@ -25,11 +25,11 @@ public final class OrganizationInfo {
     return newOrganization;
   }
 
-  public Boolean isValid() {
+  public boolean isValid() {
     UrlValidator urlValidator = new UrlValidator();
     //Required fields
     if (((String) this.entity.getProperty("name")).isEmpty() || 
-    	  ((String) this.entity.getProperty("name")).isEmpty() ||
+    	  ((String) this.entity.getProperty("about")).isEmpty() ||
         !urlValidator.isValid(((String) this.entity.getProperty("webLink")))) {
       return false;
     }
@@ -40,7 +40,7 @@ public final class OrganizationInfo {
     return true;
   }
 
-  public void compare(Entity duplicate) {
+  public void merge(Entity duplicate) {
     this.entity.getProperties().forEach((property, value) -> {
       if (Objects.isNull(value) && !Objects.isNull(duplicate.getProperty(property))) {
         this.entity.setProperty(property, duplicate.getProperty(property));
