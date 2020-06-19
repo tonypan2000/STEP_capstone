@@ -17,8 +17,10 @@ package com.google.step.servlets;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.sps.data.OrganizationInfo;
 import java.io.IOException;
@@ -41,9 +43,16 @@ public class DataServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     OrganizationInfo submission = new OrganizationInfo(request);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    datastore.prepare(submission.getQueryForDuplicates());
-    datastore.put(submission.getEntity());
-    response.sendRedirect("/index.html");
+    datastore.prepare(submission.getQueryForDuplicates()).asList(FetchOptions.Builder.withDefaults()).forEach((duplicate -> {
+      submission.compare(duplicate);
+      datastore.delete(duplicate.getKey());
+    }));
+    if (submission.isValid()) {
+      datastore.put(submission.getEntity());
+      response.sendRedirect("/index.html");
+    } else {
+      response.sendRedirect("/");
+    }
   }
 
 }
