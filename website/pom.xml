@@ -35,6 +35,13 @@
       <artifactId>appengine-api-1.0-sdk</artifactId>
       <version>1.9.59</version>
     </dependency>
+    <!-- LocalService for Testing Datastore -->
+    <dependency>
+        <groupId>com.google.appengine</groupId>
+        <artifactId>appengine-testing</artifactId>
+        <version>1.4.0</version>
+        <scope>test</scope>
+    </dependency>
     <!-- Google Cloud Translation -->
     <dependency>
       <groupId>com.google.cloud</groupId>
